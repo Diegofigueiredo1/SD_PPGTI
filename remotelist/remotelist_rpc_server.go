@@ -4,11 +4,18 @@ import (
 	"fmt"
 	"net"
 	"net/rpc"
-	"ppgti/remotelist/pkg"
+	remotelist "ppgti/remotelist/pkg"
 )
 
+const filename = "Data_file.json"
+
 func main() {
-	list := new(remotelist.RemoteList)
+	list, err := remotelist.NewRemoteList(filename)
+	if err != nil {
+		fmt.Println("Falha em carregar o RemoteList", err)
+		return
+	}
+
 	rpcs := rpc.NewServer()
 	rpcs.Register(list)
 	l, e := net.Listen("tcp", "[localhost]:5000")
